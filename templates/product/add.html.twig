@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+{% block main %}
+    <form action="{{ path('add_product') }}">
+        <label for="name">Product name:</label><br>
+        <input type="text" id="name" name="name"><br>
+        <label for="price">Price:</label><br>
+        <input type="number" id="price" name="price">
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}

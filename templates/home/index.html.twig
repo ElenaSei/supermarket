@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+{% block main %}
+    <table action="{{ path('homepage') }}" style="width:30%"  border="1">
+        <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Promotion</th>
+            <th>Add</th>
+        </tr>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price }}</td>
+                <td>
+                {% if product.promotion.quantity is defined %}
+                    {{ product.promotion.quantity }} for {{ product.promotion.price }}
+
+                {% endif %}
+                </td>
+                <td>
+                    <button class="add-another-collection-widget"
+                            type="button"
+                            data-list-selector="#item-fields-list"
+                            data-item="{{ product | json_encode }}">Add</button>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <form>
+        <div id="items"></div>
+        <button id="make_order" type="button">Buy</button>
+    </form>
+    <div id="bill">
+    </div>
+    {#{{ form_start(form) }}#}
+    {# store the prototype on the data-prototype attribute #}
+    {#<ul id="item-fields-list"#}
+        {#data-prototype="{{ form_widget(form.items.vars.prototype)|e }}"#}
+        {#data-widget-tags="{{ '<li></li>'|e }}"#}
+        {#data-widget-counter="{{ form.items|length }}">#}
+        {#{% for itemField in form.items %}#}
+            {#<li>#}
+                {#{{ form_errors(itemField) }}#}
+                {#{{ form_widget(itemField) }}#}
+            {#</li>#}
+        {#{% endfor %}#}
+    {#</ul>#}
+    {#{{ form_end(form) }}#}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="add-collection-widget.js"></script>
+    <script>
+
+
+// add-collection-widget.js
+jQuery(document).ready(function () {
+    var selectedProducts = [];
+    jQuery('.add-another-collection-widget').click(function (e) {
+    var product = JSON.parse(jQuery(this).attr('data-item'));
+    selectedProducts.push(product);
+    jQuery( "#items" ).append( `<p>${product.name}</p>` );
+
+
+
+    // console.log(product);
+    // var list = jQuery(jQuery(this).attr('data-list-selector'));
+    // // Try to find the counter of the list or use the length of the list
+    // var counter = list.data('widget-counter') || list.children().length;
+    //
+    // // grab the prototype template
+    // var newWidget = list.attr('data-prototype');
+    // // replace the "__name__" used in the id and name of the prototype
+    // // with a number that's unique to your items
+    // // end name attribute looks like name="contact[items][2]"
+    // newWidget = newWidget.replace(/__name__/g, counter);
+    // // Increase the counter
+    // counter++;
+    // // And store it, the length cannot be used if deleting widgets is allowed
+    // list.data('widget-counter', counter);
+    //
+    // // create a new list element and add it to the list
+    // var newElem = jQuery(list.attr('data-widget-tags')).html(newWidget);
+    // newElem.appendTo(list);
+    });
+    jQuery('#make_order').click(function (e) {
+        var params = { myarray: selectedProducts };
+
+        var paramJSON = JSON.stringify(params);
+        jQuery.ajax({
+            type: "POST",
+            url: "{{ path('make_order') }}",
+            data: { data: paramJSON },
+            dataType: "json",
+            success: function (response) {
+                var result = JSON.parse(response.data);
+                result.items.forEach(item => {
+                    jQuery( "#bill" ).append( `<p>Bought ${item.quantity} ${item.product.name}</p>` );
+
+                })
+                jQuery( "#bill" ).append( `<p>Total: ${result.totalPrice}</p>` );
+            },
+        })
+    })
+});
+    </script>
+{% endblock %}
