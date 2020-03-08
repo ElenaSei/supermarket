@@ -1,10 +1,15 @@
 {% extends 'base.html.twig' %}
 {% block main %}
-    <form action="{{ path('add_product') }}">
+    <form action="{{ path('add_product') }}" method="post">
         <label for="name">Product name:</label><br>
-        <input type="text" id="name" name="name"><br>
+        <input type="text" id="name" name="product[name]"><br>
         <label for="price">Price:</label><br>
-        <input type="number" id="price" name="price">
+        <input type="number" id="price" name="product[price]">
+        <p>Promotion:</p>
+        <label for="quantity">Quantity:</label><br>
+        <input type="number" id="quantity" name="promotion[quantity]"><br>
+        <label for="prom_price">Price:</label><br>
+        <input type="number" id="prom_price" name="promotion[price]">
         <input type="submit" value="Submit">
     </form>
 {% endblock %}

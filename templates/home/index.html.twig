@@ -12,16 +12,18 @@
                 <td>{{ product.name }}</td>
                 <td>{{ product.price }}</td>
                 <td>
-                {% if product.promotion.quantity is defined %}
-                    {{ product.promotion.quantity }} for {{ product.promotion.price }}
-
-                {% endif %}
+                    {% if product.getActivePromotion %}
+                    {{product.getActivePromotion.quantity}} for {{ product.getActivePromotion.price }}
+                    {% endif %}
                 </td>
                 <td>
                     <button class="add-another-collection-widget"
                             type="button"
                             data-list-selector="#item-fields-list"
                             data-item="{{ product | json_encode }}">Add</button>
+                    <a href="{{ path('edit_product', {id: product.id}) }}">
+                        Edit
+                    </a>
                 </td>
             </tr>
         {% endfor %}
@@ -101,6 +103,7 @@ jQuery(document).ready(function () {
                 })
                 jQuery( "#bill" ).append( `<p>Total: ${result.totalPrice}</p>` );
             },
+
         })
     })
 });

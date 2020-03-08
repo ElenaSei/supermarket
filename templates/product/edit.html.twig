@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% block main %}
+    <form action="{{ path('edit_product', {id: product.id}) }}" method="post">
+        <label for="name">Product name:</label><br>
+        <input type="text" id="name" name="product[name]" value="{{ product.name }}"><br>
+        <label for="price">Price:</label><br>
+        <input type="number" id="price" name="product[price]" value="{{ product.price }}">
+        <p>Promotion:</p>
+        <label for="quantity">Quantity:</label><br>
+        <input type="number" id="quantity" name="promotion[quantity]" value="{{ product.getActivePromotion.quantity }}"><br>
+        <label for="prom_price">Price:</label><br>
+        <input type="number" id="prom_price" name="promotion[price]" value="{{ product.getActivePromotion.price }}">
+        <input type="submit" value="Edit">
+    </form>
+{% endblock %}

@@ -3,6 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Product;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,7 +16,14 @@ class ProductType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
+            ->add('name', TextType::class)
+            ->add('price', NumberType::class)
+            ->add('promotions', CollectionType::class, [
+                // each entry in the array will be an "promotion" field
+                'entry_type' => ProductType::class,
+                'allow_add' => true,
+            ])
+            ->add('save', SubmitType::class, ['label' => 'Create'])
         ;
     }
 

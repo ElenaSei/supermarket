@@ -45,18 +45,9 @@ class SupermarketController extends AbstractController
     public function indexAction(Request $request): Response
     {
         $products = $this->productRepository->findAll();
-        $bill = new Bill();
-
-        $form = $this->createForm(BillType::class, $bill);
-        $form->handleRequest($request);
-//        if ($form->isSubmitted()) {
-//            dump($bill);
-//            exit;
-//        }
 
         return $this->render('home/index.html.twig',
-            ['products' => $products,
-                'form' => $form->createView()]);
+            ['products' => $products]);
     }
 
     /**

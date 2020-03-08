@@ -19,32 +19,28 @@ class PromotionRepository extends ServiceEntityRepository
         parent::__construct($registry, Promotion::class);
     }
 
-    // /**
-    //  * @return Promotion[] Returns an array of Promotion objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function save(Promotion $promotion)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        try{
+            $this->_em->persist($promotion);
+            $this->_em->flush();
 
-    /*
-    public function findOneBySomeField($value): ?Promotion
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            return true;
+        }catch (\Exception $e){
+
+            return $e->getMessage();
+        }
     }
-    */
+
+    public function update(Promotion $promotion){
+        try{
+            $this->_em->merge($promotion);
+            $this->_em->flush();
+
+            return true;
+        }catch (\Exception $e){
+
+            return $e->getMessage();
+        }
+    }
 }

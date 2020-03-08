@@ -64,14 +64,16 @@ class Bill
     public function setTotalPrice(): self
     {
         foreach ($this->getItems() as $item) {
-            $promotion = $item->getProduct()->getPromotion();
+            $promotion = $item->getProduct()->getActivePromotion();
 
-            if (isset($promotion)){
+            if ($promotion){
                 $remainder = $item->getQuantity() % $promotion->getQuantity();
                 $quotient = ($item->getQuantity() - $remainder) / $promotion->getQuantity();
 
                 $this->totalPrice += $remainder * $item->getProduct()->getPrice();
                 $this->totalPrice += $quotient * $promotion->getPrice();
+            } else {
+                $this->totalPrice += $item->getQuantity() * $item->getProduct()->getPrice();
             }
         }
 

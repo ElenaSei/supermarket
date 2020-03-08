@@ -5,9 +5,11 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
+ *  @UniqueEntity("name")
  */
 class Product
 {
@@ -19,7 +21,8 @@ class Product
     public $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
+     *
      */
     public $name;
 
@@ -29,13 +32,15 @@ class Product
     public $price;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Promotion", mappedBy="product", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Promotion", mappedBy="product", orphanRemoval=true, cascade={"persist"})
      */
-    private $promotion;
+    private $promotions;
 
-    public function __construct()
+    public function __construct(string $name, int $price)
     {
-
+        $this->setName($name);
+        $this->setPrice($price);
+        $this->promotions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -67,18 +72,42 @@ class Product
         return $this;
     }
 
-    public function getPromotion(): ?Promotion
+    /**
+     * @return Collection|Promotion[]
+     */
+    public function getPromotions(): Collection
     {
-        return $this->promotion;
+        return $this->promotions;
     }
 
-    public function setPromotion(Promotion $promotion): self
+    /**
+     * @return Promotion
+     */
+    public function getActivePromotion()
     {
-        $this->promotion = $promotion;
+        return $this->promotions->filter(function (Promotion $promotion) {
+            return $promotion->getActive() == 1;
+        })->first();
+    }
 
-        // set the owning side of the relation if necessary
-        if ($promotion->getProduct() !== $this) {
+    public function addPromotion(Promotion $promotion): self
+    {
+        if (!$this->promotions->contains($promotion)) {
+            $this->promotions[] = $promotion;
             $promotion->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removePromotion(Promotion $promotion): self
+    {
+        if ($this->promotions->contains($promotion)) {
+            $this->promotions->removeElement($promotion);
+            // set the owning side to null (unless already changed)
+            if ($promotion->getProduct() === $this) {
+                $promotion->setProduct(null);
+            }
         }
 
         return $this;

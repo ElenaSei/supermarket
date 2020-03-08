@@ -19,15 +19,28 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-    /*
-    public function findOneBySomeField($value): ?Product
+    public function save(Product $product)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        try{
+            $this->_em->persist($product);
+            $this->_em->flush();
+
+            return true;
+        }catch (\Exception $e){
+
+            return $e->getMessage();
+        }
     }
-    */
+
+    public function update(Product $product){
+        try{
+            $this->_em->merge($product);
+            $this->_em->flush();
+
+            return true;
+        }catch (\Exception $e){
+
+            return $e->getMessage();
+        }
+    }
 }
