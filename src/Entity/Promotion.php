@@ -17,7 +17,7 @@ class Promotion
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="promotions", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Product", inversedBy="promotion")
      * @ORM\JoinColumn(nullable=false, name="product_id", referencedColumnName="id")
      */
     private $product;
@@ -28,26 +28,9 @@ class Promotion
     private $quantity;
 
     /**
-     * @ORM\Column(type="boolean", options={"default" : 1})
-     */
-    private $active;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $price;
-
-    public function __construct()
-    {
-        $this->active = true;
-    }
-
-    public static function create($quantity, $price) : Promotion
-    {
-        return (new Promotion())
-            ->setQuantity($quantity)
-            ->setPrice($price);
-    }
 
     public function getId(): ?int
     {
@@ -74,18 +57,6 @@ class Promotion
     public function setQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
-
-        return $this;
-    }
-
-    public function getActive(): ?bool
-    {
-        return $this->active;
-    }
-
-    public function setActive(bool $active): self
-    {
-        $this->active = $active;
 
         return $this;
     }

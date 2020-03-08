@@ -1,16 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Valentin
- * Date: 8.03.20
- * Time: 14:52
- */
 
 namespace App\Controller;
 
 use App\Entity\Promotion;
 use App\Form\PromotionType;
-use App\Repository\ProductRepository;
 use App\Repository\PromotionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,13 +37,15 @@ class PromotionController extends AbstractController
 
         if ($form->isSubmitted()) {
             if (!empty($promotion->getQuantity()) && !empty($promotion->getPrice())) {
-                $activePromotion = $promotion->getProduct()->getActivePromotion();
+                $activePromotion = $promotion->getProduct()->getPromotion();
 
                 if($activePromotion){
-                    $this->promotionRepository->delete($activePromotion);
+                    $activePromotion->setPrice($promotion->getPrice());
+                    $activePromotion->setQuantity($promotion->getQuantity());
+                    $this->promotionRepository->save($activePromotion);
+                } else {
+                    $this->promotionRepository->save($promotion);
                 }
-
-                $this->promotionRepository->save($promotion);
             }
             return $this->redirectToRoute('homepage');
         }

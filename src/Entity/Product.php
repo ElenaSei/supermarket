@@ -2,8 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -15,7 +13,7 @@ class Product
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      */
     public $id;
@@ -32,14 +30,9 @@ class Product
     public $price;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Promotion", mappedBy="product", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Promotion", mappedBy="product", orphanRemoval=true)
      */
-    private $promotions;
-
-    public function __construct()
-    {
-        $this->promotions = new ArrayCollection();
-    }
+    private $promotion;
 
     public function getId(): ?int
     {
@@ -71,42 +64,17 @@ class Product
     }
 
     /**
-     * @return Collection|Promotion[]
-     */
-    public function getPromotions(): Collection
-    {
-        return $this->promotions;
-    }
-
-    /**
      * @return Promotion
      */
-    public function getActivePromotion()
+    public function getPromotion(): ?Promotion
     {
-        return $this->promotions->filter(function (Promotion $promotion) {
-            return $promotion->getActive() == 1;
-        })->first();
+        return $this->promotion;
     }
 
-    public function addPromotion(Promotion $promotion): self
+    public function setPromotion(Promotion $promotion): self
     {
-        if (!$this->promotions->contains($promotion)) {
-            $this->promotions[] = $promotion;
-            $promotion->setProduct($this);
-        }
+        $this->promotion = $promotion;
 
-        return $this;
-    }
-
-    public function removePromotion(Promotion $promotion): self
-    {
-        if ($this->promotions->contains($promotion)) {
-            $this->promotions->removeElement($promotion);
-            // set the owning side to null (unless already changed)
-            if ($promotion->getProduct() === $this) {
-                $promotion->setProduct(null);
-            }
-        }
         return $this;
     }
 }

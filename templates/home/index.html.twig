@@ -12,8 +12,8 @@
                 <td>{{ product.name }}</td>
                 <td>{{ product.price }}</td>
                 <td>
-                    {% if product.getActivePromotion %}
-                    {{product.getActivePromotion.quantity}} for {{ product.getActivePromotion.price }}
+                    {% if product.getPromotion %}
+                    {{product.getPromotion.quantity}} for {{ product.getPromotion.price }}
                     {% endif %}
                 </td>
                 <td>

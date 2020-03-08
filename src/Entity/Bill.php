@@ -63,8 +63,10 @@ class Bill
 
     public function setTotalPrice(): self
     {
+        $this->totalPrice = 0;
+
         foreach ($this->getItems() as $item) {
-            $promotion = $item->getProduct()->getActivePromotion();
+            $promotion = $item->getProduct()->getPromotion();
 
             if ($promotion){
                 $remainder = $item->getQuantity() % $promotion->getQuantity();
@@ -107,7 +109,6 @@ class Bill
                 $item->setBill(null);
             }
         }
-
         return $this;
     }
 }
