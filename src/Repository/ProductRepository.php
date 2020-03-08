@@ -43,4 +43,16 @@ class ProductRepository extends ServiceEntityRepository
             return $e->getMessage();
         }
     }
+
+    public function delete(Product $product){
+        try{
+            $this->_em->remove($product);
+            $this->_em->flush();
+
+            return true;
+        }catch (\Exception $e){
+
+            return $e->getMessage();
+        }
+    }
 }

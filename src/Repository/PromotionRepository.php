@@ -43,4 +43,16 @@ class PromotionRepository extends ServiceEntityRepository
             return $e->getMessage();
         }
     }
+
+    public function delete(Promotion $promotion){
+        try{
+            $this->_em->remove($promotion);
+            $this->_em->flush();
+
+            return true;
+        }catch (\Exception $e){
+
+            return $e->getMessage();
+        }
+    }
 }

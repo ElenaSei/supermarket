@@ -29,7 +29,7 @@ class Bill
     private $totalPrice;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\BillItem", mappedBy="bill", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\BillItem", mappedBy="bill", orphanRemoval=true, cascade={"persist"})
      */
     private $items;
 

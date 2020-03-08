@@ -37,11 +37,16 @@ class Promotion
      */
     private $price;
 
-    public function __construct(int $quantity, int $price)
+    public function __construct()
     {
-        $this->setQuantity($quantity);
-        $this->setPrice($price);
         $this->active = true;
+    }
+
+    public static function create($quantity, $price) : Promotion
+    {
+        return (new Promotion())
+            ->setQuantity($quantity)
+            ->setPrice($price);
     }
 
     public function getId(): ?int

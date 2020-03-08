@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+{% block main %}
+    {#<form action="{{ path('add_promotion') }}" method="post">#}
+        {#<label for="name">Product name:</label><br>#}
+        {#<select class="form-control" name="product[id]">#}
+            {#{% for product in products %}#}
+                {#<option value="{{product.id}}">{{product.name}}</option>#}
+            {#{% endfor %}#}
+        {#</select>#}
+        {#<p>Promotion:</p>#}
+        {#<label for="quantity">Quantity:</label><br>#}
+        {#<input type="number" id="quantity" name="promotion[quantity]"><br>#}
+        {#<label for="prom_price">Price:</label><br>#}
+        {#<input type="number" id="prom_price" name="promotion[price]">#}
+        {#<input type="submit" value="Submit">#}
+    {#</form>#}
+    {{ form_start(form, {'action': path('add_promotion'), 'method': 'POST'}) }}
+        {{ form_errors(form) }}
+    <div class="row">
+        <div class="col">
+            {{ form_row(form.product) }}
+        </div>
+        <div class="row">
+        <div class="col" id="some-custom-id">
+            {{ form_row(form.quantity) }}
+        </div>
+        </div>
+            <div class="row">
+                <div class="col" id="some-custom-id">
+                    {{ form_row(form.price) }}
+                </div>
+            </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

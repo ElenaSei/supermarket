@@ -24,6 +24,9 @@
                     <a href="{{ path('edit_product', {id: product.id}) }}">
                         Edit
                     </a>
+                    <a href="{{ path('delete_product', {id: product.id}) }}">
+                    Delete
+                    </a>
                 </td>
             </tr>
         {% endfor %}

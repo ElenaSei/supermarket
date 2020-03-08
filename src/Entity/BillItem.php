@@ -18,7 +18,7 @@ class BillItem
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Product")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $product;
 

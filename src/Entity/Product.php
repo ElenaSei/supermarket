@@ -36,11 +36,15 @@ class Product
      */
     private $promotions;
 
-    public function __construct(string $name, int $price)
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BillItem", mappedBy="bill", orphanRemoval=true, cascade={"remove"})
+     */
+    private $items;
+
+    public function __construct()
     {
-        $this->setName($name);
-        $this->setPrice($price);
         $this->promotions = new ArrayCollection();
+        $this->items = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -107,6 +111,29 @@ class Product
             // set the owning side to null (unless already changed)
             if ($promotion->getProduct() === $this) {
                 $promotion->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function addItem(BillItem $item): self
+    {
+        if (!$this->items->contains($item)) {
+            $this->items[] = $item;
+            $item->setBill($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItem(BillItem $item): self
+    {
+        if ($this->items->contains($item)) {
+            $this->items->removeElement($item);
+            // set the owning side to null (unless already changed)
+            if ($item->getBill() === $this) {
+                $item->setBill(null);
             }
         }
 
