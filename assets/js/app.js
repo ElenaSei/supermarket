@@ -11,8 +11,3 @@ const $ = require('jquery');
 
 // create global $ and jQuery variables
 global.$ = global.jQuery = $;
-
-// Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
-
-
-console.log('Hello Webpack Encore! Edit me in assets/js/app.js');

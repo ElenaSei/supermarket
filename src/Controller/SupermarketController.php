@@ -3,7 +3,6 @@ namespace App\Controller;
 
 use App\Entity\Bill;
 use App\Entity\BillItem;
-use App\Form\BillType;
 use App\Repository\BillItemRepository;
 use App\Repository\BillRepository;
 use App\Repository\ProductRepository;
@@ -39,10 +38,9 @@ class SupermarketController extends AbstractController
 
     /**
      * @Route("/", name="homepage")
-     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction(Request $request): Response
+    public function indexAction(): Response
     {
         $products = $this->productRepository->findAll();
 
@@ -77,7 +75,6 @@ class SupermarketController extends AbstractController
                     $item->setBill($bill);
                     $items[$product->getName()] = $item;
                     $this->billItemRepository->save($item);
-                    //return new JsonResponse(array('data' => $this->billItemRepository->update($items[$product->getName()])));
 
                     $bill->addItem($items[$product->getName()]);
                 }
@@ -90,27 +87,19 @@ class SupermarketController extends AbstractController
             $bill->setTotalPrice();
             $this->billRepository->save($bill);
 
-            $encoders = [
-                new JsonEncode()
-            ];
-            $normalizers = [
-                new ObjectNormalizer()
-            ];
+            $encoders = [ new JsonEncode() ];
+            $normalizers = [ new ObjectNormalizer() ];
 
             $serializer = new Serializer($normalizers, $encoders);
-
 
             $jsonContent = $serializer->serialize($bill, 'json', [
                 'circular_reference_handler' => function ($object) {
                     return $object->getId();
                 }
             ]);
-
             return new JsonResponse(array('data' => $jsonContent));
         }
-
         return new Response('This is not ajax!', 200);
-
     }
 }
 

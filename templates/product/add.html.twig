@@ -1,13 +1,5 @@
 {% extends 'base.html.twig' %}
 {% block main %}
-    {#<form action="{{ path('add_product') }}" method="post">#}
-        {#<label for="name">Product name:</label><br>#}
-        {#<input type="text" id="name" name="product[name]"><br>#}
-        {#<label for="price">Price:</label><br>#}
-        {#<input type="number" id="price" name="product[price]">#}
-        {#<input type="submit" value="Submit">#}
-    {#</form>#}
-
     {{ form_start(form, {'action': path('add_product'), 'method': 'POST'}) }}
     {{ form_errors(form) }}
     <div class="row">
