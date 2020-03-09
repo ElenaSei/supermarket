@@ -22,7 +22,7 @@ final class Version20200308154235 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('INSERT INTO product (name, price) VALUES (\'A\', 50), (\'B\', 30), (\'C\', 20), (\'D\', 10)');
-        $this->addSql('INSERT INTO promotion (product_id, quantity, price) VALUES ((SELECT product.id FROM product WHERE product.name = \'A\'), 3, 135), ((SELECT product.id FROM product WHERE product.name = \'B\'), 2, 45)');
+        $this->addSql('INSERT INTO promotion (product_id, quantity, price) VALUES ((SELECT product.id FROM product WHERE product.name = \'A\'), 3, 130), ((SELECT product.id FROM product WHERE product.name = \'B\'), 2, 45)');
     }
 
     public function down(Schema $schema) : void
