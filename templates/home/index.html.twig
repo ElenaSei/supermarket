@@ -62,7 +62,7 @@
                 success: function (response) {
                     var result = JSON.parse(response.data);
                     result.items.forEach(item => {
-                        jQuery( "#bill" ).append( `<p>Bought ${item.quantity} ${item.product.name}</p>` );
+                        jQuery( "#bill" ).append( `<p>${item.product.name} - ${item.quantity}</p>` );
                     });
                     jQuery( "#bill" ).append( `<p>Total: ${result.totalPrice}</p>` );
                 },
