@@ -36,8 +36,11 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            $this->productRepository->save($product);
-            return $this->redirectToRoute('homepage');
+            if (!$this->productRepository->findOneBy(['name' => $product->getName()])) {
+                $this->productRepository->save($product);
+
+                return $this->redirectToRoute('homepage');
+            }
         }
 
         return $this->render('product/add.html.twig',
